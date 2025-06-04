@@ -3,6 +3,8 @@ using DesafioProjetoHospedagem.Models;
 
 Console.OutputEncoding = Encoding.UTF8;
 
+// Antiga entrada de dados para o sistema de hospedagem
+
 // // Cria os modelos de hóspedes e cadastra na lista de hóspedes
 // List<Pessoa> hospedes = new List<Pessoa>();
 
@@ -28,16 +30,16 @@ Console.OutputEncoding = Encoding.UTF8;
 ////////////////////////////////// Menu criado para usar o sistema.
 
 
+// Variáveis para armazenar as informações da suíte
 string tipoSuite = string.Empty;
 decimal valorDiaria = 0;
 int capacidade = 0;
 decimal quantHospedes = 0;
 int diasReservados = 0;
 
-
+// Entrada inicial de dados da suíte
 Console.WriteLine("Seja bem vindo ao sistema de Hospedagem!\n" +
                   "Digite o tipo da suite:");
-
 tipoSuite = Convert.ToString(Console.ReadLine());
 
 Console.WriteLine("Agora digite o valor da diária:");
@@ -46,16 +48,17 @@ valorDiaria = Convert.ToDecimal(Console.ReadLine());
 Console.WriteLine("Agora digite a capacidade da suíte:");
 capacidade = Convert.ToInt32(Console.ReadLine());
 
-// Instancia a classe Suite, já com os valores obtidos anteriormente
+// Instancia a classe Suite com os dados informados
 Suite suite = new Suite(tipoSuite, capacidade, valorDiaria);
 
-// Instancia a classe Reserva antes de receber a quantidade de dias reservados
+// Instancia a classe Reserva com dias zerados (será atualizado posteriormente)
 Reserva reserva = new Reserva(diasReservados: 0);
 
+// Controle do menu
 string opcao = string.Empty;
 bool exibirMenu = true;
 
-// Realiza o loop do menu
+// Loop principal do menu
 while (exibirMenu)
 {
     Console.Clear();
@@ -67,14 +70,16 @@ while (exibirMenu)
     switch (Console.ReadLine())
     {
         case "1":
+            // Criação de nova reserva
             List<Pessoa> hospedes = new List<Pessoa>();
-            // string idHospede = string.Empty;
             string nomeHospede = string.Empty;
             string sobrenomeHospede = string.Empty;
 
+            // Captura quantidade de hóspedes
             Console.WriteLine("Quantos hóspedes para esta reserva?");
             quantHospedes = Convert.ToDecimal(Console.ReadLine());
 
+            // Loop para cadastro de cada hóspede
             for (int i = 0; i < quantHospedes; i++)
             {
                 Console.WriteLine("Digite o nome completo do hóspede:");
@@ -82,17 +87,17 @@ while (exibirMenu)
                 nomeHospede = nomeCompleto[0];
                 sobrenomeHospede = string.Join(" ", nomeCompleto.Skip(1));
 
+                // Cria e adiciona novo hóspede à lista
                 Pessoa pessoa = new Pessoa(nomeHospede, sobrenomeHospede);
                 hospedes.Add(pessoa);
             }
 
-            // Cria uma nova reserva, passando a suíte e os hóspedes
+            // Configuração dos dias reservados
             Console.WriteLine("Por quantos dias será feita a reserva? (Temos 10% de desconto a partir de 10 dias)");
-
             diasReservados = Convert.ToInt32(Console.ReadLine());
             reserva.DiasReservados = diasReservados;
-            // Reserva reserva = new Reserva(diasReservados);
 
+            // Cadastra suíte e hóspedes na reserva
             reserva.CadastrarSuite(suite);
             reserva.CadastrarHospedes(hospedes);
 
@@ -100,11 +105,13 @@ while (exibirMenu)
             break;
 
         case "2":
+            // Exibe informações da reserva atual
             Console.WriteLine($"Hóspedes: {reserva.ObterQuantidadeHospedes()}");
             Console.WriteLine($"Valor diária: U$ {reserva.CalcularValorDiaria()}");
             break;
 
         case "3":
+            // Encerra o programa
             exibirMenu = false;
             break;
 
